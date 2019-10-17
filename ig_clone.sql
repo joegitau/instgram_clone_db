@@ -212,3 +212,15 @@ ORDER BY posts DESC;
 ---- (total no of photos / total no of users)
 SELECT 
   (SELECT COUNT(*) FROM photos) / (SELECT COUNT(*) FROM users) AS avg_posts;
+
+--- 10 most popular hashtags
+SELECT 
+  tags.tag_name,
+  COUNT(*) AS tag_count
+FROM tags
+INNER JOIN photo_tags
+  ON tags.id = photo_tags.tag_id
+GROUP BY tags.id
+ORDER BY tag_count DESC
+LIMIT 10;
+
