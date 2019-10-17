@@ -156,3 +156,44 @@ INSERT INTO photo_tags (photo_id, tag_id)
   (4, 13), (5, 15), (5, 14), (5, 17), (5, 16), (6, 19), (6, 13), (6, 17), (6, 21), (7, 11), (7, 12), (7, 21), (7, 13), (8, 17), 
   (8, 21), (8, 13), (8, 19), (9, 18), (10, 2), (11, 12), (11, 21), (11, 11), (12, 4), (13, 13), (13, 19), (14, 1), (14, 20), 
   (17, 19), (17, 13), (17, 18), (19, 5), (21, 20), (21, 3), (21, 1), (21, 4), (22, 7), (22, 5), (22, 6);
+
+
+-----------------------
+-- QUERIES
+----------
+--- oldest users
+SELECT * FROM users
+ORDER BY created_at
+LIMIT 5;
+
+-- what day of the week does most regirstrations occur
+SELECT 
+  DAYNAME(created_at) AS weekday,
+  COUNT(*) AS users_registered
+FROM users
+GROUP BY weekday
+ORDER BY users_registered DESC;
+
+--- users that are in-active
+SELECT 
+  username,
+  IFNULL(image_url, 'not posted') AS photos
+FROM users u
+LEFT JOIN photos p
+  ON u.id = p.user_id
+WHERE image_url IS NULL;
+
+-- most liked photo + photo owner
+SELECT 
+  photos.image_url AS photo,
+  users.username AS 'photo owner',
+  COUNT(*) AS likes
+FROM photos 
+INNER JOIN likes 
+  ON photos.id = likes.photo_id
+INNER JOIN users
+  ON users.id = photos.user_id
+GROUP BY photos.id
+ORDER BY likes DESC
+LIMIT 1;
+
