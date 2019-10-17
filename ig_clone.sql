@@ -224,3 +224,13 @@ GROUP BY tags.id
 ORDER BY tag_count DESC
 LIMIT 10;
 
+--- find users that have liked each and every photo (behaviour of bots)
+SELECT 
+  users.username,
+  MAX(photo_id) AS total_photos,
+  COUNT(*) AS total_likes
+FROM users
+INNER JOIN likes
+  ON users.id = likes.user_id
+GROUP BY users.id
+HAVING total_likes = total_photos;
