@@ -197,3 +197,18 @@ GROUP BY photos.id
 ORDER BY likes DESC
 LIMIT 1;
 
+--- get top most poster + no of posts
+SELECT
+  users.id,
+  username,
+  COUNT(*) AS posts
+FROM users
+INNER JOIN photos
+  ON users.id = photos.user_id
+GROUP BY users.id
+ORDER BY posts DESC;
+
+--- calculate avg no of photos per user
+---- (total no of photos / total no of users)
+SELECT 
+  (SELECT COUNT(*) FROM photos) / (SELECT COUNT(*) FROM users) AS avg_posts;
