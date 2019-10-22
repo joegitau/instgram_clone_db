@@ -243,7 +243,7 @@ HAVING total_likes = total_photos;
 -- prevent users from following themselves
 DELIMITER $$
   CREATE TRIGGER prevent_self_following
-    BEFORE INSERT ON folows FOR EACH ROW
+    BEFORE INSERT ON follows FOR EACH ROW
     BEGIN
       IF NEW.followee_id = NEW.follower_id
       THEN 
