@@ -234,3 +234,23 @@ INNER JOIN likes
   ON users.id = likes.user_id
 GROUP BY users.id
 HAVING total_likes = total_photos;
+
+
+----------------------------------------
+--- SQL TRIGGERS
+-----------------
+
+-- prevent users from following themselves
+DELIMITER $$
+  CREATE TRIGGER prevent_self_following
+    BEFORE INSERT ON folows FOR EACH ROW
+    BEGIN
+      IF NEW.followee_id = NEW.follower_id
+      THEN 
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Ohh Common, you cannot follow yourself! - get real friends'
+      END IF;
+    END;
+
+$$
+DELIMITER ;
